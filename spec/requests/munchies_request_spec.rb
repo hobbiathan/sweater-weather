@@ -21,7 +21,7 @@ RSpec.describe 'Munchies API' do
     end
 
     it 'has appropriate sub-keys FOR :restaurant' do
-      expect(json[:data][:attributes][:forecast].keys).to eq([:name, :address])
+      expect(json[:data][:attributes][:restaurant].keys).to eq([:name, :address])
     end
   end
 
