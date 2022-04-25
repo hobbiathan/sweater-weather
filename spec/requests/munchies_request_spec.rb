@@ -25,13 +25,23 @@ RSpec.describe 'Munchies API' do
     end
   end
 
-  context 'invalid query' do
+  context 'missing queries' do
     it 'returns 400' do
       expect(response).to have_http_status(400)
     end
 
-    it 'renders custom error json' do
-        expect(json[:error]).to eq({:message=>"invalid parameters - no location provided"})
+    context 'no start' do
+      expect(json[:error]).to eq({:message=>"invalid parameters - no start location provided"})
     end
+
+    context 'no destination' do
+      expect(json[:error]).to eq({:message=>"invalid parameters - no destination location provided"})
+    end
+
+    context 'no food' do
+      expect(json[:error]).to eq({:message=>"invalid parameters - no food provided"})
+    end
+
   end
+
 end
