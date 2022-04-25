@@ -1,21 +1,21 @@
-class ForecastSerializer
+class MunchiesSerializer
 
-  def self.travel_info(data)
+  def self.travel_info(routePoro, weatherPoro)
     {
     "data": {
         "id": "null",
         "type": "munchie",
         "attributes": {
-              "destination_city": data[:destination_city],
-              "travel_time": data[:travel_time],
+              "destination_city": routePoro.destination_city,
+              "travel_time": routePoro.travel_time,
               "forecast": {
-                      "summary": data[:forecast][:summary],
-                      "temperature": data[:forecast][:temperature],
+                      "summary": weatherPoro.conditions,
+                      "temperature": weatherPoro.temperature,
               },
 
               "restaurant": {
-                      "date": daily_weather.date,
-                      "sunrise": daily_weather.sunrise,
+                      "date": nil,
+                      "sunrise": nil
               }
     }
   }
