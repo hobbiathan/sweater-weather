@@ -26,19 +26,22 @@ RSpec.describe 'Munchies API' do
   end
 
   context 'missing queries' do
-    it 'returns 400' do
-      expect(response).to have_http_status(400)
-    end
 
-    context 'no start' do
+    it 'no start' do
+      get "/api/v1/munchies?start=&destination=pueblo,co&food=chinese"
+      expect(response).to have_http_status(400)
       expect(json[:error]).to eq({:message=>"invalid parameters - no start location provided"})
     end
 
-    context 'no destination' do
+    it 'no destination' do
+      get "/api/v1/munchies?start=denver,co&destination=&food=chinese"
+      expect(response).to have_http_status(400)
       expect(json[:error]).to eq({:message=>"invalid parameters - no destination location provided"})
     end
 
-    context 'no food' do
+    it 'no food' do
+      get "/api/v1/munchies?start=denver,co&destination=pueblo,co&food="
+      expect(response).to have_http_status(400)
       expect(json[:error]).to eq({:message=>"invalid parameters - no food provided"})
     end
 
