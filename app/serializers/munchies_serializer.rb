@@ -1,6 +1,6 @@
 class MunchiesSerializer
 
-  def self.travel_info(routePoro, weatherPoro)
+  def self.travel_info(routePoro, weatherPoro, foodPoro)
     {
     "data": {
         "id": "null",
@@ -14,8 +14,8 @@ class MunchiesSerializer
               },
 
               "restaurant": {
-                      "date": nil,
-                      "sunrise": nil
+                      "name": foodPoro.name,
+                      "address": foodPoro.address
               }
     }
   }
