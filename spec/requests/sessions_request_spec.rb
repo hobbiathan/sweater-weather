@@ -30,7 +30,7 @@ RSpec.describe 'Sessions API', type: :request do
     end
   end
 
-  context 'sessions POST fails' do
+  context 'sessions POST fails (password)' do
     before(:each) do
       User.create!(email: 'huberb@gmail.com', password: 'passwor', password_confirmation: 'passwor')
 
@@ -38,6 +38,29 @@ RSpec.describe 'Sessions API', type: :request do
 
         "email": "huberb@gmail.com",
         "password": "password1"
+
+      }
+    end
+
+    it 'returns failure' do
+      post '/api/v1/sessions', :params => @bad_req_body
+      expect(response).to have_http_status(401)
+    end
+
+    it 'returns proper body' do
+      post '/api/v1/sessions', :params => @bad_req_body
+      expect(json[:error]).to eq({:message=>"invalid credentials"})
+    end
+  end
+
+  context 'sessions POST fails (email)' do
+    before(:each) do
+      User.create!(email: 'huber@gmail.com', password: 'passwor', password_confirmation: 'passwor')
+
+      @bad_req_body = {
+
+        "email": "hubert@gmail.com",
+        "password": "passwor"
 
       }
     end
