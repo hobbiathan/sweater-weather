@@ -40,7 +40,7 @@ RSpec.describe 'Sessions API' do
 
     it 'returns failure' do
       post '/api/v1/sessions', :params => @bad_req_body
-      expect(response).to have_http_status(401)
+      expect(response).to have_http_status(400)
     end
   end
 end
