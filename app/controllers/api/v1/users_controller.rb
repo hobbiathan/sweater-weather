@@ -33,9 +33,4 @@ class Api::V1::UsersController < ApplicationController
     def error(body)
       json_response({ "error": {"message" => body} }, :bad_request)
     end
-
-    def self.gen_key
-      SecureRandom.hex
-    end
-
 end
