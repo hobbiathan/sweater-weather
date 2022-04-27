@@ -1,16 +1,20 @@
 class Api::V1::UsersController < ApplicationController
   def create
-    if params[:user].blank?
+    if params["email"].blank?
       error("no email provided")
-    elsif params[:password].blank?
+    elsif params["password"].blank?
       error("no password provided")
-    elsif params[:password_confirmation].blank?
+    elsif params["password_confirmation"].blank?
       error("no password confirmation provided")
     else
-      if valid_pass?
-        user = User.create(user_params)
-
-        json_response(UserSerializer.new(user), :created)
+      if !!(valid_pass?)
+        exists = User.find_by_email(params[:email])
+        if !!(exists)
+          error("email already registered")
+        else
+            user = User.create(user_params)
+            json_response(UserSerializer.new(user), :created)
+        end
       else
         error("password and confirmation do not match")
       end
@@ -23,15 +27,10 @@ class Api::V1::UsersController < ApplicationController
     end
 
     def valid_pass?
-      params[:password] == params[:password_confirmation]
+      params["password"] == params["password_confirmation"]
     end
 
     def error(body)
       json_response({ "error": {"message" => body} }, :bad_request)
     end
-
-    def self.gen_key
-      SecureRandom.hex
-    end
-
 end
