@@ -33,7 +33,7 @@ RSpec.describe 'Users API', type: :request do
         end
       end
 
-      context 'unsuccesful' do
+      context 'unsuccesful - mismatched password/confirmation' do
         before(:each) do
           @bad_req = {
                            "email": "hubert@test.com",
@@ -78,5 +78,70 @@ RSpec.describe 'Users API', type: :request do
           expect(json[:error]).to eq({:message=>"email already registered"})
         end
       end
-    end
+
+      context 'unsuccessful - email not in body' do
+        before(:each) do
+          @bad_req = {
+                           "password": 'hubertnumbaone',
+                           "password_confirmation": 'hubertnumbaone'
+                         }
+        end
+
+        it 'has failed response' do
+          post "/api/v1/users", :params => @bad_req
+
+          expect(response).to_not be_successful
+          expect(response).to have_http_status(400)
+        end
+
+        it 'gives proper response body for missing email' do
+          post "/api/v1/users", :params => @bad_req
+          expect(json[:error]).to eq({:message=>"no email provided"})
+        end
+      end
+
+      context 'unsuccessful - no password' do
+        before(:each) do
+          @bad_req = {
+                           "email": "hubert@gmail.com",
+                           "password": '',
+                           "password_confirmation": 'hubertnumbaone'
+                         }
+        end
+
+        it 'has failed response' do
+          post "/api/v1/users", :params => @bad_req
+
+          expect(response).to_not be_successful
+          expect(response).to have_http_status(400)
+        end
+
+        it 'gives proper response body for missing password' do
+          post "/api/v1/users", :params => @bad_req
+          expect(json[:error]).to eq({:message=>"no password provided"})
+        end
+      end
+
+      context 'unsuccessful - no confirmation' do
+        before(:each) do
+          @bad_req = {
+                           "email": "hubert@gmail.com",
+                           "password": 'dasgadgasgasg',
+                           "password_confirmation": ''
+                         }
+        end
+
+        it 'has failed response' do
+          post "/api/v1/users", :params => @bad_req
+
+          expect(response).to_not be_successful
+          expect(response).to have_http_status(400)
+        end
+
+        it 'gives proper response body for missing confirmation' do
+          post "/api/v1/users", :params => @bad_req
+          expect(json[:error]).to eq({:message=>"no password confirmation provided"})
+        end
+      end
+  end
 end
